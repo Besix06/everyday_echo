@@ -31,6 +31,6 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch {
-  return NextResponse.json({ error: 'Failed to fetch current track' }, { status: 500 });
-}
+    return NextResponse.json({ error: 'Failed to fetch current track' }, { status: 500 });
+  }
 }
