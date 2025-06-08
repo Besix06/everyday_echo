@@ -94,12 +94,10 @@ export default function Home() {
   };
 
   const Dropdown = ({
-    
     options,
     selected,
     onSelect,
   }: {
-    label: string;
     options: string[];
     selected: string;
     onSelect: (value: string) => void;
@@ -186,13 +184,11 @@ export default function Home() {
         </div>
         <div className="flex gap-3 items-center">
           <Dropdown
-            label="Mode"
             options={["Top Track", "Currently Playing"]}
             selected={mode === "top" ? "Top Track" : "Currently Playing"}
             onSelect={(val) => setMode(val === "Top Track" ? "top" : "current")}
           />
           <Dropdown
-            label="Style"
             options={styleOptions}
             selected={style}
             onSelect={(val) => setStyle(val)}
