@@ -35,6 +35,14 @@ export default function Home() {
     if (storedUsername) setUsername(storedUsername);
   }, []);
 
+  const logout = () => {
+    localStorage.removeItem("lastfm_username");
+    setUsername(null);
+    setTrack(null);
+    setPosterPrompt(null);
+    setImageUrl(null);
+  };
+
   const fetchTrack = async () => {
     if (!username) return;
     const endpoint =
@@ -44,6 +52,7 @@ export default function Home() {
 
     const res = await fetch(endpoint);
     const data = await res.json();
+    console.log("Fetched track:", data);
     if (!data.error) setTrack(data.track || data);
     else setTrack(null);
   };
@@ -151,9 +160,22 @@ export default function Home() {
       }`}
     >
       <div className="w-full flex justify-between items-center mb-6 max-w-4xl">
-        <h1 className="text-3xl font-bold flex items-center gap-2">
-          🎧 <span>Everyday Echo</span>
-        </h1>
+        <div className="flex flex-col">
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            🎧 <span>Everyday Echo</span>
+          </h1>
+          {username && (
+            <div className="text-sm mt-1 text-gray-600 dark:text-gray-300">
+              Signed in as <strong>{username}</strong>
+              <button
+                onClick={logout}
+                className="ml-3 text-xs text-red-500 hover:underline"
+              >
+                Log out
+              </button>
+            </div>
+          )}
+        </div>
         <div className="flex gap-3 items-center">
           <Dropdown
             label="Mode"
@@ -176,13 +198,25 @@ export default function Home() {
         </div>
       </div>
 
-      {mode === "top" && (
+      {!username && (
+        <button
+          onClick={() => {
+            const apiKey = process.env.NEXT_PUBLIC_LASTFM_API_KEY || 'fallback_key';
+            window.location.href = `https://www.last.fm/api/auth/?api_key=${apiKey}&cb=http://localhost:3000/callback`;
+          }}
+          className="bg-black text-white px-4 py-2 rounded mb-6"
+        >
+          Connect to Last.fm
+        </button>
+      )}
+
+      {mode === "top" && username && (
         <div className="mb-6">
           <label className="block text-sm font-medium mb-1">Select timeframe</label>
           <select
             value={timeframe}
             onChange={(e) => setTimeframe(e.target.value)}
-            className="px-3 py-2 border rounded"
+            className="px-3 py-2 border rounded bg-white text-black dark:bg-gray-900 dark:text-white"
           >
             {timeframeOptions.map((tf) => (
               <option key={tf.value} value={tf.value}>
@@ -193,12 +227,14 @@ export default function Home() {
         </div>
       )}
 
-      <button
-        onClick={fetchTrack}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mb-6"
-      >
-        Fetch {mode === "top" ? "Top Track" : "Current Track"}
-      </button>
+      {username && (
+        <button
+          onClick={fetchTrack}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mb-6"
+        >
+          Fetch {mode === "top" ? "Top Track" : "Current Track"}
+        </button>
+      )}
 
       {track?.title && track?.artist ? (
         <div className="text-center">
@@ -224,9 +260,11 @@ export default function Home() {
           </button>
         </div>
       ) : (
-        <div className="text-center text-gray-500 italic mt-4">
-          No track data available.
-        </div>
+        username && (
+          <div className="text-center text-gray-500 italic mt-4">
+            No track data available.
+          </div>
+        )
       )}
 
       {posterPrompt && (
