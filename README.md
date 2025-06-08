@@ -11,6 +11,7 @@ Choose from styles like *Studio Ghibli*, *Minimalist Danish*, and more. It's lik
 - Switch between light/dark **themes**
 - Responsive UI with clean Tailwind-based dropdowns
 
+![App in action](./screenshot.jpg)
 
 ## 🧰 Tech Stack
 - Frontend & server-side: **Next.js 14**
