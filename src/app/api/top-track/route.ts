@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
         image: top.image?.[2]?.['#text'] || null,
       },
     });
-  } catch (_) {
+  } catch {
   return NextResponse.json({ error: 'Failed to fetch current track' }, { status: 500 });
 }
 }
