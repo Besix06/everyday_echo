@@ -10,9 +10,17 @@ const styleOptions = [
   "Minimalist Danish",
 ];
 
+type Track = {
+  title: string;
+  artist: string;
+  album?: string;
+  image?: string;
+  nowPlaying?: boolean;
+};
+
 export default function Home() {
   const [username, setUsername] = useState<string | null>(null);
-  const [track, setTrack] = useState<any>(null);
+  const [track, setTrack] = useState<Track | null>(null);
   const [posterPrompt, setPosterPrompt] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loadingImage, setLoadingImage] = useState(false);
@@ -86,7 +94,7 @@ export default function Home() {
   };
 
   const Dropdown = ({
-    label,
+    
     options,
     selected,
     onSelect,
