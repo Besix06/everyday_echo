@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
     token,
     };
 
-  const api_sig = getSignature(params, API_SECRET);
+  const api_sig = getSignature(params, API_SECRET as string);
   const url = `https://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${API_KEY}&token=${token}&api_sig=${api_sig}&format=json`;
 
   try {
