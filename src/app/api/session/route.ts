@@ -25,11 +25,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Missing token' }, { status: 400 });
   }
 
-  const params: Record<string, string> = {
-    api_key: API_KEY,
+    const params: Record<string, string> = {
+    api_key: API_KEY as string,
     method: 'auth.getSession',
     token,
-  };
+    };
 
   const api_sig = getSignature(params, API_SECRET);
   const url = `https://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${API_KEY}&token=${token}&api_sig=${api_sig}&format=json`;
