@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import CryptoJS from 'crypto-js';
 
-const API_KEY = process.env.LASTFM_API_KEY;
-const API_SECRET = process.env.LASTFM_API_SECRET;
-
-if (!API_KEY || !API_SECRET) {
-  throw new Error("Missing LASTFM_API_KEY or LASTFM_API_SECRET");
-}
-
 function getSignature(params: Record<string, string>, secret: string) {
   const keys = Object.keys(params).sort();
   let base = '';
@@ -18,6 +11,16 @@ function getSignature(params: Record<string, string>, secret: string) {
 }
 
 export async function GET(req: NextRequest) {
+  const API_KEY = process.env.LASTFM_API_KEY;
+  const API_SECRET = process.env.LASTFM_API_SECRET;
+
+  if (!API_KEY || !API_SECRET) {
+    return NextResponse.json(
+      { error: 'Missing LASTFM_API_KEY or LASTFM_API_SECRET' },
+      { status: 500 }
+    );
+  }
+
   const { searchParams } = new URL(req.url);
   const token = searchParams.get('token');
 
@@ -25,13 +28,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Missing token' }, { status: 400 });
   }
 
-    const params: Record<string, string> = {
-    api_key: API_KEY as string,
+  const params: Record<string, string> = {
+    api_key: API_KEY,
     method: 'auth.getSession',
     token,
-    };
+  };
 
-  const api_sig = getSignature(params, API_SECRET as string);
+  const api_sig = getSignature(params, API_SECRET);
   const url = `https://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${API_KEY}&token=${token}&api_sig=${api_sig}&format=json`;
 
   try {
