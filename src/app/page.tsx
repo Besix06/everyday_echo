@@ -161,14 +161,13 @@ export default function Home() {
 
   return (
     <main
-      className={`min-h-screen flex flex-col items-center p-6 transition-all duration-300 ${
-        theme === "dark" ? "bg-black text-white" : "bg-gray-50 text-gray-900"
-      }`}
+      className={`min-h-screen flex flex-col items-center p-6 transition-all duration-300 ${theme === "dark" ? "bg-black text-white" : "bg-gray-50 text-gray-900"
+        }`}
     >
       <div className="w-full flex justify-between items-center mb-6 max-w-4xl">
-        <div className="flex flex-col">
+        <div className="flex flex-col animate-fade-up">
           <h1 className="text-3xl font-bold flex items-center gap-2">
-            🎧 <span>Everyday Echo</span>
+            <span className="animate-pulse-gentle">🎧</span> <span className="animate-shimmer">Everyday Echo</span>
           </h1>
           {username && (
             <div className="text-sm mt-1 text-gray-600 dark:text-gray-300">
